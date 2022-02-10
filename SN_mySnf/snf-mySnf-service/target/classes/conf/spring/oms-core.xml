@@ -1,0 +1,1536 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cxf="http://cxf.apache.org/core"
+	   xmlns:p="http://cxf.apache.org/policy" xmlns:ss="http://www.springframework.org/schema/security"
+	   xmlns:jaxws="http://cxf.apache.org/jaxws" xmlns:jee="http://www.springframework.org/schema/jee"
+	   xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:tx="http://www.springframework.org/schema/tx"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+   	http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd
+   	http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
+   	http://cxf.apache.org/policy http://cxf.apache.org/schemas/policy.xsd
+   	http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+   	http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context.xsd
+   	http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+   	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+   	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+	<!-- 注解：扫描包 -->
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+	<context:annotation-config />
+	<!--<bean id="commonApplicationContextRegister" class="com.suning" />
+	<context:component-scan base-package="com.suning" >
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>-->
+
+
+	<!-- spring ApplicationContext注册类，实现在非spring管理的类中直接使用ApplicationContext -->
+	<bean id="applicationContextRegister" class="" />
+
+	<!-- 加载属性配置文件  注：只允许加载一次,在利用profiles（pom文件中）替换完*.properties文件中的属性后（替换发生在maven的compile过程），
+	PropertyPlaceholderConfigurer是个bean工厂后置处理器的实现，在spring容器初始化的时候就会找到属性文件的属性，进行值获取-->
+	<bean id="propertyConfig"
+		  class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location">
+			<value>classpath:conf/*.properties</value>
+		</property>
+		<!-- 这里的默认 是${(或者$[),不使用这个,因为${(或者$[)，在pom文件中使用了profile,为了区别开，使用@{,如果继续用${(或者$[)，
+		会导致在编译完成后值就被替换了，但是这个就不是动态的了-->
+		<property name="placeholderPrefix" value="@{">
+		</property>
+		<!--主要是system-properties-mode的值的问题
+		首先是一共有四个值
+		SYSTEM_ PROPERTIES_ MODE_FALLBACK,SYSTEM_PROPERTIES_MODE_FALLBACK模式:默认在指定的properties文件中找不到你要的属性，它还会在Java的System类属性中查找。
+		SYSTEM_ PROPERTIES_ MODE_NEVER,SYSTEM_PROPERTIES_MODE_NEVER模式:允许在properties文件中查找,允许去System类中查找。
+		SYSTEM_ PROPERTIES_ MODE_OVERRIDE,SYSTEM_PROPERTIES_MODE_OVERRIDE模式:优先System类中查找,找不到再去properties文件中查找
+		ENVIRONMENT：和OVERRIDE类似-->
+		<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+	</bean>
+
+	<!-- aop事务 -->
+	<bean id="defaultExceptionHandler"
+		  class="com.suning.framework.exception.handler.DefaultExceptionHandler" />
+	<bean id="textExceptionInfoFormater"
+		  class="com.suning.framework.exception.handler.TextExceptionInfoFormater" />
+	<bean id="loggerOutputer" class="com.suning.framework.exception.output.LoggerOutputer" />
+	<!-- 统一jndi配置-->
+	<jee:jndi-lookup id="datasourceGomstPub" jndi-name="@{datasourceGomstPub.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+
+	<jee:jndi-lookup id="datasourceGomstPub1" jndi-name="@{datasourceGomstPub1.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub2" jndi-name="@{datasourceGomstPub2.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub3" jndi-name="@{datasourceGomstPub3.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub4" jndi-name="@{datasourceGomstPub4.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub5" jndi-name="@{datasourceGomstPub5.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub6" jndi-name="@{datasourceGomstPub6.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub7" jndi-name="@{datasourceGomstPub7.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub8" jndi-name="@{datasourceGomstPub8.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub9" jndi-name="@{datasourceGomstPub9.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub10" jndi-name="@{datasourceGomstPub10.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub11" jndi-name="@{datasourceGomstPub11.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub12" jndi-name="@{datasourceGomstPub12.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub13" jndi-name="@{datasourceGomstPub13.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub14" jndi-name="@{datasourceGomstPub14.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub15" jndi-name="@{datasourceGomstPub15.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub16" jndi-name="@{datasourceGomstPub16.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub17" jndi-name="@{datasourceGomstPub17.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub18" jndi-name="@{datasourceGomstPub18.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub19" jndi-name="@{datasourceGomstPub19.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub20" jndi-name="@{datasourceGomstPub20.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub21" jndi-name="@{datasourceGomstPub21.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub22" jndi-name="@{datasourceGomstPub22.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub23" jndi-name="@{datasourceGomstPub23.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub24" jndi-name="@{datasourceGomstPub24.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub25" jndi-name="@{datasourceGomstPub25.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub26" jndi-name="@{datasourceGomstPub26.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub27" jndi-name="@{datasourceGomstPub27.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub28" jndi-name="@{datasourceGomstPub28.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub29" jndi-name="@{datasourceGomstPub29.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub30" jndi-name="@{datasourceGomstPub30.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub31" jndi-name="@{datasourceGomstPub31.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub32" jndi-name="@{datasourceGomstPub32.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<!--归档配置数据-->
+	<!---GOMST-923-->
+	<jee:jndi-lookup id="datasourceGomstPub33" jndi-name="@{datasourceGomstPub33.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+
+	<!-- GX-YG-PUB -->
+	<jee:jndi-lookup id="datasourceGomstPub1_YG" jndi-name="@{datasourceGomstPub1_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub2_YG" jndi-name="@{datasourceGomstPub2_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub3_YG" jndi-name="@{datasourceGomstPub3_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub4_YG" jndi-name="@{datasourceGomstPub4_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub5_YG" jndi-name="@{datasourceGomstPub5_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub6_YG" jndi-name="@{datasourceGomstPub6_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub7_YG" jndi-name="@{datasourceGomstPub7_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub8_YG" jndi-name="@{datasourceGomstPub8_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub9_YG" jndi-name="@{datasourceGomstPub9_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub10_YG" jndi-name="@{datasourceGomstPub10_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub11_YG" jndi-name="@{datasourceGomstPub11_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub12_YG" jndi-name="@{datasourceGomstPub12_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub13_YG" jndi-name="@{datasourceGomstPub13_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub14_YG" jndi-name="@{datasourceGomstPub14_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub15_YG" jndi-name="@{datasourceGomstPub15_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub16_YG" jndi-name="@{datasourceGomstPub16_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub17_YG" jndi-name="@{datasourceGomstPub17_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub18_YG" jndi-name="@{datasourceGomstPub18_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub19_YG" jndi-name="@{datasourceGomstPub19_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub20_YG" jndi-name="@{datasourceGomstPub20_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub21_YG" jndi-name="@{datasourceGomstPub21_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub22_YG" jndi-name="@{datasourceGomstPub22_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub23_YG" jndi-name="@{datasourceGomstPub23_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub24_YG" jndi-name="@{datasourceGomstPub24_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub25_YG" jndi-name="@{datasourceGomstPub25_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub26_YG" jndi-name="@{datasourceGomstPub26_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub27_YG" jndi-name="@{datasourceGomstPub27_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub28_YG" jndi-name="@{datasourceGomstPub28_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub29_YG" jndi-name="@{datasourceGomstPub29_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub30_YG" jndi-name="@{datasourceGomstPub30_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub31_YG" jndi-name="@{datasourceGomstPub31_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub32_YG" jndi-name="@{datasourceGomstPub32_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstPub33_YG" jndi-name="@{datasourceGomstPub33_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+
+	<jee:jndi-lookup id="datasourceGomstBiz0" jndi-name="@{datasourceGomstBiz0.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz1" jndi-name="@{datasourceGomstBiz1.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz2" jndi-name="@{datasourceGomstBiz2.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz3" jndi-name="@{datasourceGomstBiz3.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz4" jndi-name="@{datasourceGomstBiz4.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz5" jndi-name="@{datasourceGomstBiz5.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz6" jndi-name="@{datasourceGomstBiz6.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz7" jndi-name="@{datasourceGomstBiz7.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz8" jndi-name="@{datasourceGomstBiz8.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz9" jndi-name="@{datasourceGomstBiz9.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz10" jndi-name="@{datasourceGomstBiz10.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz11" jndi-name="@{datasourceGomstBiz11.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz12" jndi-name="@{datasourceGomstBiz12.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz13" jndi-name="@{datasourceGomstBiz13.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz14" jndi-name="@{datasourceGomstBiz14.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz15" jndi-name="@{datasourceGomstBiz15.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz16" jndi-name="@{datasourceGomstBiz16.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz17" jndi-name="@{datasourceGomstBiz17.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz18" jndi-name="@{datasourceGomstBiz18.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz19" jndi-name="@{datasourceGomstBiz19.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz20" jndi-name="@{datasourceGomstBiz20.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz21" jndi-name="@{datasourceGomstBiz21.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz22" jndi-name="@{datasourceGomstBiz22.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz23" jndi-name="@{datasourceGomstBiz23.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz24" jndi-name="@{datasourceGomstBiz24.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz25" jndi-name="@{datasourceGomstBiz25.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz26" jndi-name="@{datasourceGomstBiz26.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz27" jndi-name="@{datasourceGomstBiz27.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz28" jndi-name="@{datasourceGomstBiz28.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz29" jndi-name="@{datasourceGomstBiz29.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz30" jndi-name="@{datasourceGomstBiz30.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz31" jndi-name="@{datasourceGomstBiz31.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz32" jndi-name="@{datasourceGomstBiz32.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz33" jndi-name="@{datasourceGomstBiz33.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz34" jndi-name="@{datasourceGomstBiz34.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz35" jndi-name="@{datasourceGomstBiz35.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz36" jndi-name="@{datasourceGomstBiz36.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz37" jndi-name="@{datasourceGomstBiz37.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz38" jndi-name="@{datasourceGomstBiz38.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz39" jndi-name="@{datasourceGomstBiz39.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz40" jndi-name="@{datasourceGomstBiz40.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz41" jndi-name="@{datasourceGomstBiz41.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz42" jndi-name="@{datasourceGomstBiz42.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz43" jndi-name="@{datasourceGomstBiz43.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz44" jndi-name="@{datasourceGomstBiz44.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz45" jndi-name="@{datasourceGomstBiz45.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz46" jndi-name="@{datasourceGomstBiz46.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz47" jndi-name="@{datasourceGomstBiz47.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz48" jndi-name="@{datasourceGomstBiz48.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz49" jndi-name="@{datasourceGomstBiz49.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz50" jndi-name="@{datasourceGomstBiz50.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz51" jndi-name="@{datasourceGomstBiz51.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz52" jndi-name="@{datasourceGomstBiz52.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz53" jndi-name="@{datasourceGomstBiz53.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz54" jndi-name="@{datasourceGomstBiz54.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz55" jndi-name="@{datasourceGomstBiz55.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz56" jndi-name="@{datasourceGomstBiz56.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz57" jndi-name="@{datasourceGomstBiz57.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz58" jndi-name="@{datasourceGomstBiz58.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz59" jndi-name="@{datasourceGomstBiz59.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz60" jndi-name="@{datasourceGomstBiz60.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz61" jndi-name="@{datasourceGomstBiz61.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz62" jndi-name="@{datasourceGomstBiz62.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz63" jndi-name="@{datasourceGomstBiz63.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz64" jndi-name="@{datasourceGomstBiz64.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+
+	<jee:jndi-lookup id="datasourceGomstBiz0_YG" jndi-name="@{datasourceGomstBiz0_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz1_YG" jndi-name="@{datasourceGomstBiz1_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz2_YG" jndi-name="@{datasourceGomstBiz2_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz3_YG" jndi-name="@{datasourceGomstBiz3_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz4_YG" jndi-name="@{datasourceGomstBiz4_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz5_YG" jndi-name="@{datasourceGomstBiz5_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz6_YG" jndi-name="@{datasourceGomstBiz6_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz7_YG" jndi-name="@{datasourceGomstBiz7_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz8_YG" jndi-name="@{datasourceGomstBiz8_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz9_YG" jndi-name="@{datasourceGomstBiz9_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz10_YG" jndi-name="@{datasourceGomstBiz10_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz11_YG" jndi-name="@{datasourceGomstBiz11_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz12_YG" jndi-name="@{datasourceGomstBiz12_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz13_YG" jndi-name="@{datasourceGomstBiz13_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz14_YG" jndi-name="@{datasourceGomstBiz14_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz15_YG" jndi-name="@{datasourceGomstBiz15_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz16_YG" jndi-name="@{datasourceGomstBiz16_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz17_YG" jndi-name="@{datasourceGomstBiz17_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz18_YG" jndi-name="@{datasourceGomstBiz18_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz19_YG" jndi-name="@{datasourceGomstBiz19_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz20_YG" jndi-name="@{datasourceGomstBiz20_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz21_YG" jndi-name="@{datasourceGomstBiz21_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz22_YG" jndi-name="@{datasourceGomstBiz22_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz23_YG" jndi-name="@{datasourceGomstBiz23_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz24_YG" jndi-name="@{datasourceGomstBiz24_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz25_YG" jndi-name="@{datasourceGomstBiz25_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz26_YG" jndi-name="@{datasourceGomstBiz26_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz27_YG" jndi-name="@{datasourceGomstBiz27_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz28_YG" jndi-name="@{datasourceGomstBiz28_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz29_YG" jndi-name="@{datasourceGomstBiz29_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz30_YG" jndi-name="@{datasourceGomstBiz30_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz31_YG" jndi-name="@{datasourceGomstBiz31_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz32_YG" jndi-name="@{datasourceGomstBiz32_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz33_YG" jndi-name="@{datasourceGomstBiz33_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz34_YG" jndi-name="@{datasourceGomstBiz34_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz35_YG" jndi-name="@{datasourceGomstBiz35_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz36_YG" jndi-name="@{datasourceGomstBiz36_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz37_YG" jndi-name="@{datasourceGomstBiz37_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz38_YG" jndi-name="@{datasourceGomstBiz38_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz39_YG" jndi-name="@{datasourceGomstBiz39_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz40_YG" jndi-name="@{datasourceGomstBiz40_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz41_YG" jndi-name="@{datasourceGomstBiz41_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz42_YG" jndi-name="@{datasourceGomstBiz42_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz43_YG" jndi-name="@{datasourceGomstBiz43_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz44_YG" jndi-name="@{datasourceGomstBiz44_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz45_YG" jndi-name="@{datasourceGomstBiz45_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz46_YG" jndi-name="@{datasourceGomstBiz46_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz47_YG" jndi-name="@{datasourceGomstBiz47_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz48_YG" jndi-name="@{datasourceGomstBiz48_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz49_YG" jndi-name="@{datasourceGomstBiz49_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz50_YG" jndi-name="@{datasourceGomstBiz50_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz51_YG" jndi-name="@{datasourceGomstBiz51_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz52_YG" jndi-name="@{datasourceGomstBiz52_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz53_YG" jndi-name="@{datasourceGomstBiz53_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz54_YG" jndi-name="@{datasourceGomstBiz54_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz55_YG" jndi-name="@{datasourceGomstBiz55_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz56_YG" jndi-name="@{datasourceGomstBiz56_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz57_YG" jndi-name="@{datasourceGomstBiz57_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz58_YG" jndi-name="@{datasourceGomstBiz58_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz59_YG" jndi-name="@{datasourceGomstBiz59_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz60_YG" jndi-name="@{datasourceGomstBiz60_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz61_YG" jndi-name="@{datasourceGomstBiz61_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz62_YG" jndi-name="@{datasourceGomstBiz62_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz63_YG" jndi-name="@{datasourceGomstBiz63_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+	<jee:jndi-lookup id="datasourceGomstBiz64_YG" jndi-name="@{datasourceGomstBiz64_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+
+	<jee:jndi-lookup id="datasourceGomstBiz64Bak_YG" jndi-name="@{datasourceGomstBiz64Bak_YG.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+
+
+	<jee:jndi-lookup id="datasourceGomstBiz05Bak_YH" jndi-name="@{datasourceGomstBiz05Bak_YH.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+
+	<jee:jndi-lookup id="datasourceGomstBiz36Bak_YH" jndi-name="@{datasourceGomstBiz36Bak_YH.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+
+	<jee:jndi-lookup id="datasourceGomstBiz59Bak_YH" jndi-name="@{datasourceGomstBiz59Bak_YH.jndi}"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />
+
+	<!-- 数据源管理器配置 -->
+	<bean id="shardRegister" class="com.suning.framework.dal.datasource.DefaultShardRegister">
+		<property name="shards">
+			<set>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub"/>
+					<property name="description"  value="GomstPub"/>
+				</bean>
+
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub1-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub1"/>
+					<property name="description"  value="GomstPub1"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub2-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub2"/>
+					<property name="description"  value="GomstPub2"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub3-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub3"/>
+					<property name="description"  value="GomstPub3"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub4-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub4"/>
+					<property name="description"  value="GomstPub4"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub5-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub5"/>
+					<property name="description"  value="GomstPub5"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub6-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub6"/>
+					<property name="description"  value="GomstPub6"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub7-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub7"/>
+					<property name="description"  value="GomstPub7"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub8-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub8"/>
+					<property name="description"  value="GomstPub8"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub9-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub9"/>
+					<property name="description"  value="GomstPub9"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub10-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub10"/>
+					<property name="description"  value="GomstPub10"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub11-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub11"/>
+					<property name="description"  value="GomstPub11"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub12-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub12"/>
+					<property name="description"  value="GomstPub12"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub13-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub13"/>
+					<property name="description"  value="GomstPub13"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub14-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub14"/>
+					<property name="description"  value="GomstPub14"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub15-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub15"/>
+					<property name="description"  value="GomstPub15"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub16-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub16"/>
+					<property name="description"  value="GomstPub16"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub17-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub17"/>
+					<property name="description"  value="GomstPub17"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub18-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub18"/>
+					<property name="description"  value="GomstPub18"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub19-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub19"/>
+					<property name="description"  value="GomstPub19"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub20-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub20"/>
+					<property name="description"  value="GomstPub20"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub21-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub21"/>
+					<property name="description"  value="GomstPub21"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub22-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub22"/>
+					<property name="description"  value="GomstPub22"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub23-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub23"/>
+					<property name="description"  value="GomstPub23"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub24-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub24"/>
+					<property name="description"  value="GomstPub24"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub25-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub25"/>
+					<property name="description"  value="GomstPub25"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub26-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub26"/>
+					<property name="description"  value="GomstPub26"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub27-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub27"/>
+					<property name="description"  value="GomstPub27"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub28-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub28"/>
+					<property name="description"  value="GomstPub28"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub29-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub29"/>
+					<property name="description"  value="GomstPub29"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub30-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub30"/>
+					<property name="description"  value="GomstPub30"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub31-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub31"/>
+					<property name="description"  value="GomstPub31"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub32-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub32"/>
+					<property name="description"  value="GomstPub32"/>
+				</bean>
+
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub33-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub33"/>
+					<property name="description"  value="GomstPub33"/>
+				</bean>
+
+				<!-- GX-YG-PUB -->
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub1-YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub1_YG"/>
+					<property name="description"  value="GomstPub1_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub2-YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub2_YG"/>
+					<property name="description"  value="GomstPub2_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub3-YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub3_YG"/>
+					<property name="description"  value="GomstPub3_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub4-YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub4_YG"/>
+					<property name="description"  value="GomstPub4_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub5-YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub5_YG"/>
+					<property name="description"  value="GomstPub5_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub6-YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub6_YG"/>
+					<property name="description"  value="GomstPub6_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub7-YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub7_YG"/>
+					<property name="description"  value="GomstPub7_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub8-YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub8_YG"/>
+					<property name="description"  value="GomstPub8_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub9-YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub9_YG"/>
+					<property name="description"  value="GomstPub9_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub10-YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub10_YG"/>
+					<property name="description"  value="GomstPub10_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub11-YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub11_YG"/>
+					<property name="description"  value="GomstPub11_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub12-YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub12_YG"/>
+					<property name="description"  value="GomstPub12_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub13-YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub13_YG"/>
+					<property name="description"  value="GomstPub13_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub14-YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub14_YG"/>
+					<property name="description"  value="GomstPub14_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub15-YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub15_YG"/>
+					<property name="description"  value="GomstPub15_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub16-YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub16_YG"/>
+					<property name="description"  value="GomstPub16_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub17-YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub17_YG"/>
+					<property name="description"  value="GomstPub17_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub18-YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub18_YG"/>
+					<property name="description"  value="GomstPub18_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub19-YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub19_YG"/>
+					<property name="description"  value="GomstPub19_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub20-YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub20_YG"/>
+					<property name="description"  value="GomstPub20_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub21-YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub21_YG"/>
+					<property name="description"  value="GomstPub21_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub22-YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub22_YG"/>
+					<property name="description"  value="GomstPub22_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub23-YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub23_YG"/>
+					<property name="description"  value="GomstPub23_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub24-YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub24_YG"/>
+					<property name="description"  value="GomstPub24_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub25-YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub25_YG"/>
+					<property name="description"  value="GomstPub25_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub26-YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub26_YG"/>
+					<property name="description"  value="GomstPub26_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub27-YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub27_YG"/>
+					<property name="description"  value="GomstPub27_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub28-YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub28_YG"/>
+					<property name="description"  value="GomstPub28_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub29-YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub29_YG"/>
+					<property name="description"  value="GomstPub29_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub30-YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub30_YG"/>
+					<property name="description"  value="GomstPub30_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub31-YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub31_YG"/>
+					<property name="description"  value="GomstPub31_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub32-YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub32_YG"/>
+					<property name="description"  value="GomstPub32_YG"/>
+				</bean>
+
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstPub33-YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstPub33_YG"/>
+					<property name="description"  value="GomstPub33_YG"/>
+				</bean>
+
+				<!-- YH  -->
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz0-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz0"/>
+					<property name="description"  value="GomstBiz0"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz1-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz1"/>
+					<property name="description"  value="GomstBiz1"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz2-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz2"/>
+					<property name="description"  value="GomstBiz2"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz3-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz3"/>
+					<property name="description"  value="GomstBiz3"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz4-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz4"/>
+					<property name="description"  value="GomstBiz4"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz5-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz5"/>
+					<property name="description"  value="GomstBiz5"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz6-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz6"/>
+					<property name="description"  value="GomstBiz6"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz7-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz7"/>
+					<property name="description"  value="GomstBiz7"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz8-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz8"/>
+					<property name="description"  value="GomstBiz8"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz9-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz9"/>
+					<property name="description"  value="GomstBiz9"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz10-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz10"/>
+					<property name="description"  value="GomstBiz10"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz11-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz11"/>
+					<property name="description"  value="GomstBiz11"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz12-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz12"/>
+					<property name="description"  value="GomstBiz12"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz13-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz13"/>
+					<property name="description"  value="GomstBiz13"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz14-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz14"/>
+					<property name="description"  value="GomstBiz14"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz15-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz15"/>
+					<property name="description"  value="GomstBiz15"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz16-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz16"/>
+					<property name="description"  value="GomstBiz16"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz17-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz17"/>
+					<property name="description"  value="GomstBiz17"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz18-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz18"/>
+					<property name="description"  value="GomstBiz18"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz19-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz19"/>
+					<property name="description"  value="GomstBiz19"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz20-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz20"/>
+					<property name="description"  value="GomstBiz20"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz21-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz21"/>
+					<property name="description"  value="GomstBiz21"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz22-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz22"/>
+					<property name="description"  value="GomstBiz22"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz23-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz23"/>
+					<property name="description"  value="GomstBiz23"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz24-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz24"/>
+					<property name="description"  value="GomstBiz24"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz25-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz25"/>
+					<property name="description"  value="GomstBiz25"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz26-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz26"/>
+					<property name="description"  value="GomstBiz26"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz27-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz27"/>
+					<property name="description"  value="GomstBiz27"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz28-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz28"/>
+					<property name="description"  value="GomstBiz28"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz29-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz29"/>
+					<property name="description"  value="GomstBiz29"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz30-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz30"/>
+					<property name="description"  value="GomstBiz30"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz31-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz31"/>
+					<property name="description"  value="GomstBiz31"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz32-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz32"/>
+					<property name="description"  value="GomstBiz32"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz33-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz33"/>
+					<property name="description"  value="GomstBiz33"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz34-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz34"/>
+					<property name="description"  value="GomstBiz34"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz35-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz35"/>
+					<property name="description"  value="GomstBiz35"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz36-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz36"/>
+					<property name="description"  value="GomstBiz36"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz37-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz37"/>
+					<property name="description"  value="GomstBiz37"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz38-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz38"/>
+					<property name="description"  value="GomstBiz38"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz39-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz39"/>
+					<property name="description"  value="GomstBiz39"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz40-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz40"/>
+					<property name="description"  value="GomstBiz40"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz41-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz41"/>
+					<property name="description"  value="GomstBiz41"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz42-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz42"/>
+					<property name="description"  value="GomstBiz42"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz43-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz43"/>
+					<property name="description"  value="GomstBiz43"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz44-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz44"/>
+					<property name="description"  value="GomstBiz44"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz45-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz45"/>
+					<property name="description"  value="GomstBiz45"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz46-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz46"/>
+					<property name="description"  value="GomstBiz46"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz47-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz47"/>
+					<property name="description"  value="GomstBiz47"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz48-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz48"/>
+					<property name="description"  value="GomstBiz48"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz49-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz49"/>
+					<property name="description"  value="GomstBiz49"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz50-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz50"/>
+					<property name="description"  value="GomstBiz50"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz51-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz51"/>
+					<property name="description"  value="GomstBiz51"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz52-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz52"/>
+					<property name="description"  value="GomstBiz52"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz53-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz53"/>
+					<property name="description"  value="GomstBiz53"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz54-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz54"/>
+					<property name="description"  value="GomstBiz54"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz55-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz55"/>
+					<property name="description"  value="GomstBiz55"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz56-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz56"/>
+					<property name="description"  value="GomstBiz56"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz57-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz57"/>
+					<property name="description"  value="GomstBiz57"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz58-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz58"/>
+					<property name="description"  value="GomstBiz58"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz59-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz59"/>
+					<property name="description"  value="GomstBiz59"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz60-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz60"/>
+					<property name="description"  value="GomstBiz60"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz61-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz61"/>
+					<property name="description"  value="GomstBiz61"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz62-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz62"/>
+					<property name="description"  value="GomstBiz62"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz63-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz63"/>
+					<property name="description"  value="GomstBiz63"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz64-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz64"/>
+					<property name="description"  value="GomstBiz64"/>
+				</bean>
+
+				<!-- JBYG -->
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz0_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz0_YG"/>
+					<property name="description"  value="GomstBiz0_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz1_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz1_YG"/>
+					<property name="description"  value="GomstBiz1_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz2_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz2_YG"/>
+					<property name="description"  value="GomstBiz2_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz3_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz3_YG"/>
+					<property name="description"  value="GomstBiz3_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz4_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz4_YG"/>
+					<property name="description"  value="GomstBiz4_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz5_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz5_YG"/>
+					<property name="description"  value="GomstBiz5_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz6_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz6_YG"/>
+					<property name="description"  value="GomstBiz6_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz7_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz7_YG"/>
+					<property name="description"  value="GomstBiz7_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz8_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz8_YG"/>
+					<property name="description"  value="GomstBiz8_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz9_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz9_YG"/>
+					<property name="description"  value="GomstBiz9_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz10_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz10_YG"/>
+					<property name="description"  value="GomstBiz10_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz11_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz11_YG"/>
+					<property name="description"  value="GomstBiz11_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz12_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz12_YG"/>
+					<property name="description"  value="GomstBiz12_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz13_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz13_YG"/>
+					<property name="description"  value="GomstBiz13_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz14_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz14_YG"/>
+					<property name="description"  value="GomstBiz14_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz15_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz15_YG"/>
+					<property name="description"  value="GomstBiz15_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz16_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz16_YG"/>
+					<property name="description"  value="GomstBiz16_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz17_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz17_YG"/>
+					<property name="description"  value="GomstBiz17_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz18_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz18_YG"/>
+					<property name="description"  value="GomstBiz18_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz19_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz19_YG"/>
+					<property name="description"  value="GomstBiz19_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz20_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz20_YG"/>
+					<property name="description"  value="GomstBiz20_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz21_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz21_YG"/>
+					<property name="description"  value="GomstBiz21_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz22_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz22_YG"/>
+					<property name="description"  value="GomstBiz22_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz23_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz23_YG"/>
+					<property name="description"  value="GomstBiz23_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz24_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz24_YG"/>
+					<property name="description"  value="GomstBiz24_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz25_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz25_YG"/>
+					<property name="description"  value="GomstBiz25_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz26_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz26_YG"/>
+					<property name="description"  value="GomstBiz26_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz27_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz27_YG"/>
+					<property name="description"  value="GomstBiz27_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz28_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz28_YG"/>
+					<property name="description"  value="GomstBiz28_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz29_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz29_YG"/>
+					<property name="description"  value="GomstBiz29_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz30_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz30_YG"/>
+					<property name="description"  value="GomstBiz30_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz31_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz31_YG"/>
+					<property name="description"  value="GomstBiz31_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz32_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz32_YG"/>
+					<property name="description"  value="GomstBiz32_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz33_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz33_YG"/>
+					<property name="description"  value="GomstBiz33_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz34_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz34_YG"/>
+					<property name="description"  value="GomstBiz34_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz35_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz35_YG"/>
+					<property name="description"  value="GomstBiz35_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz36_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz36_YG"/>
+					<property name="description"  value="GomstBiz36_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz37_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz37_YG"/>
+					<property name="description"  value="GomstBiz37_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz38_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz38_YG"/>
+					<property name="description"  value="GomstBiz38_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz39_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz39_YG"/>
+					<property name="description"  value="GomstBiz39_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz40_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz40_YG"/>
+					<property name="description"  value="GomstBiz40_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz41_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz41_YG"/>
+					<property name="description"  value="GomstBiz41_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz42_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz42_YG"/>
+					<property name="description"  value="GomstBiz42_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz43_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz43_YG"/>
+					<property name="description"  value="GomstBiz43_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz44_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz44_YG"/>
+					<property name="description"  value="GomstBiz44_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz45_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz45_YG"/>
+					<property name="description"  value="GomstBiz45_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz46_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz46_YG"/>
+					<property name="description"  value="GomstBiz46_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz47_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz47_YG"/>
+					<property name="description"  value="GomstBiz47_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz48_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz48_YG"/>
+					<property name="description"  value="GomstBiz48_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz49_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz49_YG"/>
+					<property name="description"  value="GomstBiz49_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz50_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz50_YG"/>
+					<property name="description"  value="GomstBiz50_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz51_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz51_YG"/>
+					<property name="description"  value="GomstBiz51_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz52_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz52_YG"/>
+					<property name="description"  value="GomstBiz52_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz53_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz53_YG"/>
+					<property name="description"  value="GomstBiz53_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz54_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz54_YG"/>
+					<property name="description"  value="GomstBiz54_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz55_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz55_YG"/>
+					<property name="description"  value="GomstBiz55_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz56_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz56_YG"/>
+					<property name="description"  value="GomstBiz56_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz57_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz57_YG"/>
+					<property name="description"  value="GomstBiz57_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz58_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz58_YG"/>
+					<property name="description"  value="GomstBiz58_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz59_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz59_YG"/>
+					<property name="description"  value="GomstBiz59_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz60_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz60_YG"/>
+					<property name="description"  value="GomstBiz60_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz61_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz61_YG"/>
+					<property name="description"  value="GomstBiz61_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz62_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz62_YG"/>
+					<property name="description"  value="GomstBiz62_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz63_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz63_YG"/>
+					<property name="description"  value="GomstBiz63_YG"/>
+				</bean>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz64_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz64_YG"/>
+					<property name="description"  value="GomstBiz64_YG"/>
+				</bean>
+
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz64Bak_YG-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz64Bak_YG"/>
+					<property name="description"  value="GomstBiz65_YG"/>
+				</bean>
+
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz05Bak_YH-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz05Bak_YH"/>
+					<property name="description"  value="GomstBiz66_YH"/>
+				</bean>
+
+
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz36Bak_YH-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz36Bak_YH"/>
+					<property name="description"  value="GomstBiz67_YH"/>
+				</bean>
+
+
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="GomstBiz59Bak_YH-VALUE"/>
+					<property name="dataSource"  ref="datasourceGomstBiz59Bak_YH"/>
+					<property name="description"  value="GomstBiz68_YH"/>
+				</bean>
+			</set>
+		</property>
+	</bean>
+
+
+
+	<!-- 多数据源环境 -->
+	<bean id="dalClient"
+		  class="com.suning.framework.dal.client.support.ShardingDalClient">
+		<!-- 注入数据源管理器 -->
+		<property name="shardRegister" ref="shardRegister" />
+		<!-- sqlMap文件路径配置 -->
+		<property name="sqlMapConfigLocation" value="classpath*:conf/sqlMap/sqlMap_*.xml" />
+		<!-- 路由规则文件路径配置 -->
+		<property name="shardingConfigLocation" value="classpath*:conf/sharding/*.xml" />
+		<!-- 默认数据源 -->
+		<property name="defualtShardName" value="GomstPub-VALUE"/>
+		<!-- 数据库执行超时时间：1200秒 -->
+		<property name="globalJdbcTimeout" value="1200" />
+	</bean>
+
+	<!--事务模板 -->
+	<bean id="transactionTemplate"
+		  class="org.springframework.transaction.support.TransactionTemplate">
+		<property name="transactionManager" ref="transactionManager" />
+		<!--ISOLATION_DEFAULT 表示由使用的数据库决定 -->
+		<property name="isolationLevelName" value="ISOLATION_DEFAULT" />
+		<property name="propagationBehaviorName" value="PROPAGATION_REQUIRED" />
+		<!-- <property name="timeout" value="30"/> -->
+	</bean>
+
+	<!-- 使用spring注解@Transactional开启事务 -->
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+
+	<!-- 配置spring事务管理器 -->
+	<bean id="transactionManager"
+		  class="com.suning.framework.dal.transaction.MultiDataSourceTransactionManager">
+		<property name="shardRegister" ref="shardRegister" />
+	</bean>
+
+	<context:annotation-config />
+</beans>

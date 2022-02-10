@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ss="http://www.springframework.org/schema/security"
+	   xmlns:jee="http://www.springframework.org/schema/jee" xmlns:aop="http://www.springframework.org/schema/aop"
+	   xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+   	http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+   	http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context.xsd
+   	http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+   	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+   	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	<!-- 加载属性配置文件  注：只允许加载一次,在利用profiles（pom文件中）替换完*.properties文件中的属性后（替换发生在maven的compile过程），
+	PropertyPlaceholderConfigurer是个bean工厂后置处理器的实现，在spring容器初始化的时候就会找到属性文件的属性，进行值获取-->
+	<bean id="propertyConfig"
+		  class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location">
+			<value>classpath:conf/*.properties</value>
+		</property>
+		<!-- 这里的默认 是${,不使用这个,因为${，在pom文件中使用了profile,为了区别开，使用@{-->
+		<property name="placeholderPrefix" value="@{">
+		</property>
+		<!--主要是system-properties-mode的值的问题
+		首先是一共有四个值
+		SYSTEM_ PROPERTIES_ MODE_FALLBACK,SYSTEM_PROPERTIES_MODE_FALLBACK模式:默认在指定的properties文件中找不到你要的属性，它还会在Java的System类属性中查找。
+		SYSTEM_ PROPERTIES_ MODE_NEVER,SYSTEM_PROPERTIES_MODE_NEVER模式:允许在properties文件中查找,允许去System类中查找。
+		SYSTEM_ PROPERTIES_ MODE_OVERRIDE,SYSTEM_PROPERTIES_MODE_OVERRIDE模式:优先System类中查找,找不到再去properties文件中查找
+		ENVIRONMENT：和OVERRIDE类似-->
+		<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+	</bean>
+
+	<bean id="dataSource_gomsta_000"
+		  class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
+		<property name="url" value="@{dataSource_gomsta_000_url}" />
+		<property name="username" value="@{dataSource_gomsta_000_username}" />
+		<property name="password" value="@{dataSource_gomsta_000_password}" />
+	</bean>
+
+	<bean id="dataSource_test"
+		  class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://10.47.211.229:3306/gomstpub?useUnicode=true&amp;characterEncoding=UTF-8&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC" />
+		<property name="username" value="fabu" />
+		<property name="password" value="jWb4NJ5Ocr79" />
+	</bean>
+
+	<!--<jee:jndi-lookup id="jndi_dataSource1" jndi-name="java:comp/env/jdbc/TestDB"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />-->
+
+	<!--<jee:jndi-lookup id="jndi_dataSource2" jndi-name="java:comp/env/jdbc/TestDB2"
+					 proxy-interface="javax.sql.DataSource" lookup-on-startup="true" />-->
+
+	<!--<bean id="dalClient" class="com.suning.framework.dal.client.support.DefaultDalClient">
+		<property name="sqlMapConfigLocation" value="classpath*:conf/sqlMap/sqlMap_*.xml" />
+		<property name="dataSource" ref="jndi_dataSource2" />
+	</bean>-->
+
+
+	<!-- 数据源管理器配置 -->
+	<bean id="shardRegister" class="com.suning.framework.dal.datasource.DefaultShardRegister">
+		<property name="shards">
+			<set>
+				<bean class="com.suning.framework.dal.datasource.Shard">
+					<property name="id"  value="dataSource1-VALUE"/>
+					<property name="dataSource"  ref="dataSource_gomsta_000"/>
+					<property name="description"  value="GomstPub"/>
+				</bean>
+			</set>
+		</property>
+	</bean>
+
+	<!-- 多数据源环境 -->
+	<bean id="shardingDalClient"
+		  class="com.suning.framework.dal.client.support.ShardingDalClient">
+		<!-- 注入数据源管理器 -->
+		<property name="shardRegister" ref="shardRegister" />
+		<!-- sqlMap文件路径配置 -->
+		<property name="sqlMapConfigLocation" value="classpath*:conf/sqlMap/sqlMap_*.xml" />
+		<!-- 路由规则文件路径配置 -->
+		<property name="shardingConfigLocation" value="classpath*:conf/sharding/*.xml" />
+		<!-- 默认数据源 -->
+		<property name="defualtShardName" value="dataSource_test"/>
+		<!-- 数据库执行超时时间：1200秒 -->
+		<property name="globalJdbcTimeout" value="1200" />
+	</bean>
+
+
+
+
+</beans>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<sqlMap namespace="sequence">
+	<sql id="getCount">
+    	<![CDATA[
+			SELECT COUNT(*) FROM user
+ 		]]>
+	</sql>
+    <sql id="insert">
+        ${sql}
+    </sql>
+	<sql id="query">
+		<![CDATA[
+			select * from user;
+ 		]]>
+	</sql>
+
+	<sql id="get_sys_sequence">
+		<![CDATA[
+            UPDATE SYS_SEQUENCE
+			SET CURRENT_VALUE = LAST_INSERT_ID(CURRENT_VALUE + 1)
+			WHERE
+				NAME = :name
+			AND CURRENT_VALUE < END_VALUE
+			ORDER BY
+				CURRENT_VALUE ASC
+			LIMIT 1
+        ]]>
+	</sql>
+
+	<sql id="query_deductFee_info">
+		<![CDATA[
+   			select
+				DEDUCT_TYPE as deductType,
+				DIST_CHANNEL as distChannel,
+				FEE_NO as feeNo,
+				SUB_FEE_NO as subFeeNo,
+				SUBJECTS_NAME as subjectsName,
+				CREATED_TIME as createdTime
+			from SO_DEDUCT_FEE
+			where
+			1=1
+			<#if deductType?exists && deductType!=""> AND DEDUCT_TYPE =:deductType </#if>
+    	   	<#if distChannel?exists && distChannel!=""> AND DIST_CHANNEL =:distChannel </#if>
+    	   	<#if feeNo?exists && feeNo!=""> AND FEE_NO =:feeNo </#if>
+    	   	<#if subFeeNo?exists && subFeeNo!=""> AND SUB_FEE_NO =:subFeeNo </#if>
+    	   	<#if subjectsName?exists && subjectsName!=""> AND SUBJECTS_NAME =:subjectsName </#if>
+		 	<#if startId?exists && endId?exists>
+				LIMIT :startId,:endId
+			</#if>
+			order by CREATED_TIME desc
+  	]]>
+	</sql>
+
+</sqlMap>

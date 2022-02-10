@@ -1,0 +1,60 @@
+字符串输出:
+Hello name字符串 ! / Hello itdragon博客 !
+特殊字符完成输出(http:\www.baidu.com)
+
+特殊字符完成输出(http:ww.baidu.com)
+
+字符串截取 ：
+通过下标直接获取下标对应的字母： d
+起点下标..结尾下标截取字符串：itdrag
+
+算数运算：
+"+" : 15
+"－" : 5
+"*" : 50
+"/" : 2
+"%" : 0
+
+比较运算符：
+    "*" : 50
+
+内建函数：
+第一个字母大写：Abcd1234
+所有字母小写：abcd1234
+所有字母大写：ABCD1234
+数值取整数：12
+获取集合的长度：3
+时间格式化：2021-06-05
+
+空判断和对象集合：
+        1 - ITDragon 博客
+        2 - 欢迎
+        3 - You！
+
+Map集合：
+直接通过Key获取 Value值：程序员
+通过Key遍历Map：
+    Key: name - Value: 程序员
+    Key: salary - Value: 15,000
+通过Value遍历Map：
+    Value: 程序员
+    Value: 15,000
+
+List集合：
+ITDragon blog is cool 
+
+include指令：
+引入其他文件：其他FreeMarker文件
+
+
+macro宏指令：
+使用宏macro:     定义无参数的宏macro--itdragon博客
+
+使用带参数的宏macro:     定义带参数的宏macro-- 6
+
+
+命名空间：
+另外一个FreeMarker的变量
+    result : 30
+另外一个FreeMarker的变量
+修改otherFreeMarker.ftl中的otherName变量值

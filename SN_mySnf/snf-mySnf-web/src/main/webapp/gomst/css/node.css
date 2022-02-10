@@ -1,0 +1,262 @@
+/**
+ * 使文本在鼠标拖动时不被选中
+ */
+p, span, pre, img {
+	-webkit-user-select:none; 
+	-moz-user-select:none; 
+	-ms-user-select:none;
+	user-select:none;
+}
+
+.nodeSpan {
+	color: #575765;
+	font-size: 12px;
+}
+
+/**
+ * 开始节点
+ */
+.sopNode {
+	/*background-color: rgb(120, 220, 107);*/
+	/* 字体 */
+	font-size: 12px;
+	/* 边框 */
+	border: 2px solid #40AFFE;
+	/* 圆角 */
+	border-radius: 50%;
+	/* 泛光 */
+	/*box-shadow: 0 0 15px #4E4E4E;*/
+	/* 高度 */
+	height: 20px;
+	/* 宽度 */
+	width: 45px;
+	/* 定位 */
+	position: absolute;
+	/* 鼠标样式 */
+	cursor: move;
+	/* 文字水平居中 */
+	text-align: center;
+	/* 文字垂直居中，与div的高度要保持一致 */
+	line-height: 20px;
+	/* 设置字间距 */
+	/*letter-spacing: 2px;*/
+	/* 背景渐变 */
+	/*background: linear-gradient(to right, rgb(120, 220, 107, 0.9), rgb(120, 220, 107, 0.8), rgb(120, 220, 107, 0.9));*/
+	/*background: -ms-linear-gradient(rgba(120, 220, 107, 0.9), rgba(120, 220, 107, 0.9));*/
+	/* 层叠顺序 */
+	z-index: 26;
+}
+
+/**
+ * 结束节点
+ */
+.eopNode {
+	/*background-color: rgb(220, 107, 107);*/
+	/* 字体 */
+	font-size: 12px;
+	/* 边框 */
+	border: 2px solid #40AFFE;
+	/* 圆角 */
+	border-radius: 50%;
+	/* 泛光 */
+	/*box-shadow: 0 0 15px #4E4E4E;*/
+	/* 高度 */
+	height: 20px;
+	/* 宽度 */
+	width: 45px;
+	/* 定位 */
+	position: absolute;
+	/* 鼠标样式 */
+	cursor: move;
+	/* 文字水平居中 */
+	text-align: center;
+	/* 文字垂直居中，与div的高度要保持一致 */
+	line-height: 20px;
+	/* 设置字间距 */
+	/*letter-spacing: 2px;*/
+	/* 背景渐变 */
+	/*background: linear-gradient(to right, rgb(220, 107, 107, 0.9), rgb(220, 107, 107, 0.8), rgb(220, 107, 107, 0.9));*/
+	/*background: -ms-linear-gradient(rgba(220, 107, 107, 0.9), rgba(220, 107, 107, 0.9));*/
+	/* 层叠顺序 */
+	z-index: 26;
+}
+
+/**
+ * 提前返回节点
+ */
+ .eopfNode {
+    /*background-color: rgb(220, 107, 201);*/
+	 /* 字体 */
+	 font-size: 12px;
+    /* 边框 */
+	border: 2px solid #40AFFE;
+	/* 圆角 */
+	border-radius: 50%;
+	/* 泛光 */
+	/*box-shadow: 0 0 15px #4E4E4E;*/
+	/* 高度 */
+    height: 20px;
+    /* 宽度 */
+    width: 45px;
+    /* 定位 */
+	position: absolute;
+	/* 鼠标样式 */
+	cursor: move;
+	/* 文字水平居中 */
+	text-align: center;
+	/* 文字垂直居中，与div的高度要保持一致 */
+	line-height: 20px;
+	/* 设置字间距 */
+	letter-spacing: 1px;
+    /* 背景渐变 */
+	/*background: linear-gradient(to right, rgb(220, 107, 201, 0.9), rgb(220, 107, 201, 0.8), rgb(220, 107, 201, 0.9));*/
+	/*background: -ms-linear-gradient(rgba(220, 107, 201, 0.9), rgba(220, 107, 201, 0.9));*/
+	/* 层叠顺序 */
+	z-index: 26;
+    
+	/* Rotate */
+	/*
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+    transform: rotate(-45deg);*/
+	/* Rotate Origin */
+	/*
+    -webkit-transform-origin: 0 100%;
+    -moz-transform-origin: 0 100%;
+    -ms-transform-origin: 0 100%;
+    -o-transform-origin: 0 100%;
+    transform-origin: 0 100%;*/
+}
+
+/**
+ * 提前返回节点
+ */
+.ropNode {
+	/*background-color: rgb(120, 20, 150);*/
+	/* 字体 */
+	font-size: 12px;
+	/* 边框 */
+	border: 2px solid #40AFFE;
+	/* 圆角 */
+	border-radius: 50%;
+	/* 泛光 */
+	/*box-shadow: 0 0 15px #4E4E4E;*/
+	/* 高度 */
+	height: 20px;
+	/* 宽度 */
+	width: 45px;
+	/* 定位 */
+	position: absolute;
+	/* 鼠标样式 */
+	cursor: move;
+	/* 文字水平居中 */
+	text-align: center;
+	/* 文字垂直居中，与div的高度要保持一致 */
+	line-height: 20px;
+	/* 设置字间距 */
+	letter-spacing: 1px;
+	/* 背景渐变 */
+	/*background: linear-gradient(to right, rgb(120, 20, 150, 0.9), rgb(120, 20, 150, 0.8), rgb(120, 20, 150, 0.9));*/
+	/*background: -ms-linear-gradient(rgba(120, 20, 150, 0.9), rgba(120, 20, 150, 0.9));*/
+	/* 层叠顺序 */
+	z-index: 26;
+}
+
+
+/**
+ * 基础节点
+ */
+ .bndNode {
+	/*background-color: rgb(107, 171, 220);*/
+	 /* 字体 */
+	 font-size: 12px;
+	/* 边框 */
+	border: 2px solid #40AFFE;
+	/* 圆角 */
+	border-radius: 10px;
+	/* 泛光 */
+	/*box-shadow: 0 0 15px #4E4E4E;*/
+	/* 高度 */
+	height: 20px;
+	/* 宽度 */
+	width: 45px;
+	/* 定位 */
+	position: absolute;
+	/* 鼠标样式 */
+	cursor: move;
+	/* 文字水平居中 */
+	text-align: center;
+	/* 文字垂直居中，与div的高度要保持一致 */
+	line-height: 20px;
+	/* 设置字间距 */
+	letter-spacing: 2px;
+	/* 背景渐变 */
+	/*background: linear-gradient(to right, rgb(107, 171, 220, 0.9), rgb(107, 171, 220, 0.8), rgb(107, 171, 220, 0.9));*/
+	/*background: -ms-linear-gradient(rgba(107, 171, 220, 0.9), rgba(107, 171, 220, 0.9));*/
+	/* 层叠顺序 */
+	z-index: 26;
+}
+
+/**
+ * 组合节点
+ */
+ .cndNode {
+	/*background-color: rgb(6, 167, 132);*/
+	 /* 字体 */
+	 font-size: 12px;
+	/* 边框 */
+	border: 2px solid #40AFFE;
+	/* 圆角 */
+	border-radius: 10px;
+	/* 泛光 */
+	/*box-shadow: 0 0 15px #4E4E4E;*/
+	/* 高度 */
+	height: 20px;
+	/* 宽度 */
+	width: 45px;
+	/* 定位 */
+	position: absolute;
+	/* 鼠标样式 */
+	cursor: move;
+	/* 文字水平居中 */
+	text-align: center;
+	/* 文字垂直居中，与div的高度要保持一致 */
+	line-height: 20px;
+	/* 设置字间距 */
+	/*letter-spacing: 2px;*/
+	/* 背景渐变 */
+	/*background: linear-gradient(to right, rgb(6, 167, 132, 0.9), rgb(6, 167, 132, 0.8), rgb(6, 167, 132, 0.9));*/
+	/*background: -ms-linear-gradient(rgba(6, 167, 132, 0.9), rgba(6, 167, 132, 0.9));*/
+	/* 层叠顺序 */
+	z-index: 26;
+}
+
+/**
+ * 连接线动画样式
+ */
+.connectionAnimateClass {
+	display: none;
+}
+
+/**
+ * overlay label样式
+ */
+.labelClass {
+	background-color: white;
+	padding: 5px;
+	opacity: 0.7;
+	border: 1px solid #346789;
+	border-radius: 10px;
+	cursor: pointer;
+	
+	-webkit-user-select:none;
+	-moz-user-select:none;
+	-ms-user-select:none;
+	user-select:none;
+}
+
+.jtk-connector { z-index: 25; }
+.jtk-endpoint { z-index: 27; }
+.jtk-overlay { z-index: 30; }

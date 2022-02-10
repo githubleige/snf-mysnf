@@ -1,0 +1,22 @@
+<repository>
+    <communication>
+        <name>http</name>
+        <serialization>JSON</serialization>
+        <protocol>
+            <name>http</name>
+            <url>http://127.0.0.1:2181/</url>
+            <connectTimeout>500</connectTimeout>
+        </protocol>
+    </communication>
+    <service>
+        <contract>com.suning.minos.intf.service.MinosService</contract>
+        <implCode>MinosServiceImpl</implCode>
+        <defCommunicationName>http</defCommunicationName>
+    </service>
+    <service>
+        <contract>com.suning.api.rsf.service.ApiRemoteService</contract>
+        <implCode>SOLP-cartAgingRSFService</implCode>
+        <defCommunicationName>http</defCommunicationName>
+    </service>
+	
+</repository>

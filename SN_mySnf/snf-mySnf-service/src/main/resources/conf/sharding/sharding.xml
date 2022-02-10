@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 真实环境使用的对应关系 -->
+<sharding>
+	<shardRouter id="expressionRouter">
+		<choose>
+			<when test="omsCategoryID == '00'">
+				dataSource1-VALUE
+			</when>
+		</choose>
+	</shardRouter>
+
+
+	<!-- 分库 -->
+	<!--<shardMapping>-->
+		<!--<namespace>-->
+			<!--user-->
+		<!--</namespace>-->
+		<!--<shard-ref>expressionRouter</shard-ref>-->
+	<!--</shardMapping>-->
+
+	<shardMapping>
+		<namespace>
+			sequence
+		</namespace>
+		<shard-ref>expressionRouter</shard-ref>
+	</shardMapping>
+</sharding>
